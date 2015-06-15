@@ -22,46 +22,6 @@ public:
 
 	}
 
-	std::vector<T> getPermutation(int index)
-	{
-		if (index < 0 && index >= _result.size) throw INTEGER_PERMUTATIONS_GENERATOR_GET_PERMUTATION_INDEX_EXCEPTION;
-
-		return _result[index];
-	}
-
-	int getNumber(std::vector<T> permunation)
-	{
-		if (permunation.size() != _base.size()) throw PERMUTATIONS_GENERATOR_GET_NUMBER_PERMUTATION_SIZE_EXEPTION;
-
-		if (!_COMPARE_FLAG)	throw PERMUTATIONS_GENERATOR_GET_NUMBER_COMPARE_EXEPTION;
-
-		int left = 0;
-		int right = _result.size();
-		int mid;
-		while (left <= right)
-		{
-			mid = left + (right - left) / 2;
-
-			bool more = false;
-			bool less = false;
-
-			for (int i = 0; i < permunation.size() && (more == less); i++)
-			{
-				if (_result[mid][i] < permunation[i])
-				{
-					less = true;
-					right = mid - 1;
-				}
-				else if (_result[mid][i] > permunation[i])
-				{
-					more = true;
-					left = mid + 1;
-				}
-			}
-		}
-		return mid;
-	}
-
 protected:
 
 	bool _COMPARE_FLAG; //можно ли сравнивать элементы множества?
@@ -70,6 +30,8 @@ protected:
 	
 	virtual void generate()
 	{
+		_result.clear();
+
 		//можно сравнивать элементы, а значит, можно предотвратить повторы
 		if (_COMPARE_FLAG)
 		{
@@ -90,25 +52,20 @@ protected:
 		//перестановка с помощью ассоциируемых индексов
 		else
 		{
+			IntegerPermutationsGenerator *ipg = new IntegerPermutationsGenerator(_base.size(), 0);
+			//ipg->generate();
+			std::vector<std::vector<int>> indexesResult = ipg->getResult(); //получить перестановки индексов
+
 			_result.push_back(_base);
 
-			//получить индексы
-			std::vector<unsigned int> indexes;
-			for (int i = 0; i < _base.size(); i++)
+			for (int i = 0; i < indexesResult.size(); i++)
 			{
-				indexes.push_back(i);
-			}
-
-			while (next_permutation(indexes.begin(), indexes.end()))
-			{
-				std::vector<T> v;
-
-				for (int i = 0; i < indexes.size(); i++)
+				std::vector<T> A;
+				for (int j = 0; j < indexesResult[i].size(); j++)
 				{
-					v.push_back(_base[indexes[i]]);
+					A.push_back(_base[indexesResult[i][j]]);
 				}
-
-				_result.push_back(v);
+				_result.push_back(A);
 			}
 		}
 	}
@@ -142,17 +99,24 @@ protected:
 
 		*/
 
-		std::vector<T> base = _base;
-		for (int i = base.size()-1; i >= 0; i--)
+		if (_COMPARE_FLAG)
 		{
-			for (int j = i-1; j >= 0; j--)
+			std::vector<T> base = _base;
+			for (int i = base.size() - 1; i >= 0; i--)
 			{
-				T temp = base[i];
-				base[i] = base[j];
-				base[j] = temp;
-				_result.push_back(base);
-				base = _base;
+				for (int j = i - 1; j >= 0; j--)
+				{
+					T temp = base[i];
+					base[i] = base[j];
+					base[j] = temp;
+					_result.push_back(base);
+					base = _base;
+				}
 			}
+		}
+		else
+		{
+
 		}
 	}
 };

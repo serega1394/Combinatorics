@@ -10,6 +10,12 @@ public:
 	~IntegerPermutationsGenerator();
 
 	void toFile(std::string filename);
+
+	static int getPermutationNumber(std::vector<int> permutation);
+
+	static std::vector<int> getPermutation(int number, int n);
 	
 };
+
+unsigned int factorial(unsigned int a);
 

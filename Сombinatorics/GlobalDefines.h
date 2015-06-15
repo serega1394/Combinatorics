@@ -10,3 +10,5 @@ using namespace std;
 
 #define PERMUTATIONS_GENERATOR_GET_NUMBER_COMPARE_EXEPTION "Permutation can not be compare. If you items can be compare, please create new object of class PermutationsGenerator with COMPARE_FLAG = true. Else you can not call a method \"getNumber\"";
 #define PERMUTATIONS_GENERATOR_GET_NUMBER_PERMUTATION_SIZE_EXEPTION "Permutation size is invalid, because this size not equals size of multiplicity. Please, set right size of input permutation and call this method agan. Else you can not call a method \"getNumber\"";
+
+const unsigned int FACTORIAL[11] = { 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800};
